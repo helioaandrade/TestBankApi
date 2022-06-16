@@ -1,7 +1,7 @@
 ﻿using BankApi.Domain.Entities;
 using Newtonsoft.Json;
 
-namespace BankApi.Application.Messages.Account
+namespace BankApi.Application.Dtos.Account
 {
     public class WithdrawResponse
     {

@@ -1,4 +1,4 @@
-﻿using BankApi.Application.Messages.Account;
+﻿using BankApi.Application.Services.Account;
 using BankApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -10,6 +10,12 @@ namespace BankApi.Controllers
 
     public class AccountController : ControllerBase
     {
+        private readonly IAccountApplicationService _accountApplicationService;
+
+        public AccountController(IAccountApplicationService accountApplicationService)
+        {
+            _accountApplicationService = accountApplicationService;
+        }
         /// <summary>
         /// Reset account
         /// </summary>
@@ -17,7 +23,7 @@ namespace BankApi.Controllers
         [HttpPost("reset")]
         public ActionResult Reset()
         {
-            // TODO: call account service
+            _accountApplicationService.Reset();
             return Ok();
         }
 
@@ -29,17 +35,11 @@ namespace BankApi.Controllers
         [HttpGet("balance")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<int> Get(int account_id)
+        public ActionResult<int> Get(string account_id)
         {
-            // TODO: call account service
 
-            // only test
-            if (account_id == 999)
-            {
-                return BadRequest();
-            }
-
-            return Ok(20);
+            var result = _accountApplicationService.GetAccount(account_id);
+            return Ok(result);
         }
 
         /// <summary>
@@ -54,28 +54,19 @@ namespace BankApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult SendEvent(EventEntity request)
         {
-            // TODO: call account service
-
-            // only test
-
-            // mock test deposit
-            var result = new DepositResponse
+            try
             {
-                Destination = new AccountEntity { Id = "222", Balance = 20 }
-            };
+                var result = _accountApplicationService.SendEvent(request);
 
-            //// mock test transfer
-            //var result = new TransferResponse
-            //{
-            //    Origin = new AccountEntity { Id = "111", Balance = 10 },
-            //    Destination = new AccountEntity { Id = "222", Balance = 20 }
-            //};
+                var response = JsonConvert.SerializeObject(result);
 
-            // mock test Withdraw
-            //var result = new WithdrawResponse { Origin = new AccountEntity { Id = "123", Balance = 20 } };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            var response = JsonConvert.SerializeObject(result);
-            return Ok(response);
         }
     }
 }

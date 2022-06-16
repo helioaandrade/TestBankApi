@@ -1,12 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace BankApi.Application.Messages.Account
+namespace BankApi.Application.Dtos.Account
 {
     public class TransferRequest
     {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
         [JsonProperty("origin")]
         public string Origin { get; set; }
 

@@ -5,9 +5,9 @@ namespace BankApi.Application.Services.Account
     public interface IAccountApplicationService
     {
         void Reset();
-        public AccountEntity GetAccount(string id);
-        public int GetBalance(string id);
-        void SendEvent(EventEntity entity);
+        AccountEntity GetAccount(string account_id);
+        int GetBalance(string account_id);
+        dynamic SendEvent(EventEntity entity);
     
     }
 }
