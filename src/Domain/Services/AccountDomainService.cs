@@ -1,7 +1,6 @@
 ﻿using BankApi.Application.Dtos.Account;
 using BankApi.Domain.Entities;
  
-
 namespace BankApi.Domain.Services
 {
     public class AccountDomainService : IAccountDomainService
@@ -18,18 +17,28 @@ namespace BankApi.Domain.Services
             AccountStorage.Reset();
         }
 
+        /// <summary>
+        /// Get account
+        /// </summary>
+        /// <param name="account_id"></param>
+        /// <returns></returns>
         public AccountEntity GetAccount(string account_id)
         {
-            return  AccountStorage.Find(account_id);
+            return AccountStorage.Find(account_id);
         }
 
-        public  int GetBalance(string account_id)
+        /// <summary>
+        /// Get balance
+        /// </summary>
+        /// <param name="account_id"></param>
+        /// <returns></returns>
+        public int GetBalance(string account_id)
         {
             return AccountStorage.GetBalance(account_id);
         }
 
         /// <summary>
-        /// Deposit money into account
+        /// Execute deposut event
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -37,29 +46,26 @@ namespace BankApi.Domain.Services
         {
             return AccountStorage.Deposit(request);
         }
- 
+
         /// <summary>
-        /// Transfer money from origin to account destination
+        /// Execute transfer event
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public TransferResponse Transfer(TransferRequest request)
         {
-             return AccountStorage.Transfer(request);
+            return AccountStorage.Transfer(request);
         }
 
         /// <summary>
-        /// Withdraw money from account
+        /// Execute withdraw event
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        /// <exception ref="NotImplementedException"></exception>
         public WithdrawResponse Withdraw(WithdrawRequest request)
         {
             return AccountStorage.Withdraw(request);
         }
-
-        
+ 
     }
 }

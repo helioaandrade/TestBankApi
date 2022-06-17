@@ -63,9 +63,15 @@ namespace BankApi.Controllers
             {
                 var result = _accountApplicationService.SendEvent(request);
 
-                if (request.Type.ToLower() == "withdraw")
+                if (request.Type.ToLower() == "withdraw" )
                 {
                     if (result.Origin == null)
+                        return NotFound(0);
+                }
+ 
+                if (request.Type.ToLower() == "transfer")
+                {
+                    if (result.Destination == null)
                         return NotFound(0);
                 }
 

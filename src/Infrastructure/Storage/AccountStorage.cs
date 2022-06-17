@@ -86,8 +86,7 @@ namespace BankApi.Domain.Entities
                 return new WithdrawResponse();
             }
 
-            account.Balance -= request.Amount;
-            Accounts?.Add(account); 
+            Accounts?.Add(new AccountEntity { Id = request.Origin, Balance = -request.Amount });
 
             var response = new WithdrawResponse
             {
@@ -105,20 +104,19 @@ namespace BankApi.Domain.Entities
         {
             var accountOrigin = Find(request.Origin);
 
-            if (accountOrigin != null)
-            {
-                accountOrigin.Balance = -request.Amount;
-                Accounts?.Add(accountOrigin);
-            }
-
             var accountDestination = Find(request.Origin);
 
-            if (accountDestination != null)
+            if (accountOrigin.Id == null || accountDestination.Id == null)
             {
-                accountDestination.Balance = request.Amount;
-                Accounts?.Add(accountDestination);
+                return new TransferResponse();
             }
 
+            // withdraw
+            Accounts?.Add(new AccountEntity { Id = request.Origin, Balance = -request.Amount });
+
+            // deposit
+            Accounts?.Add(new AccountEntity { Id = request.Destination, Balance = request.Amount });
+ 
             var response = new TransferResponse
             {
                 Origin = new AccountEntity { Id = request.Origin, Balance = GetBalance(request.Origin) },
@@ -130,9 +128,8 @@ namespace BankApi.Domain.Entities
 
         public static int GetBalance(string account_id)
         {
-            var balance = Accounts?
-                         .FindAll(x => x.Id == account_id)
-                         .Sum(x => x.Balance);
+            var balances = Accounts.FindAll(x => x.Id == account_id).ToList();
+            var balance = balances?.Sum(x => x.Balance);
 
             return balance.Value;
         }
