@@ -7,8 +7,7 @@ namespace BankApi.Controllers
 {
     [Route("")]
     [ApiController]
-
-    public class AccountController : ControllerBase
+     public class AccountController : ControllerBase
     {
         private readonly IAccountApplicationService _accountApplicationService;
 
@@ -37,8 +36,14 @@ namespace BankApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<int> Get(string account_id)
         {
+            var account = _accountApplicationService.GetAccount(account_id);
 
-            var result = _accountApplicationService.GetAccount(account_id);
+            if ( account.Id == null)
+            {
+                return NotFound(0);
+            }
+
+            var result = _accountApplicationService.GetBalance(account_id);
             return Ok(result);
         }
 
@@ -60,7 +65,7 @@ namespace BankApi.Controllers
 
                 var response = JsonConvert.SerializeObject(result);
 
-                return Ok(response);
+                return Created(string.Empty, response);
             }
             catch (Exception ex)
             {
