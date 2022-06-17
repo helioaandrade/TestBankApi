@@ -110,12 +110,11 @@ namespace BankApi.Domain.Entities
                 return new TransferResponse();
             }
 
-            // withdraw
-            Accounts?.Add(new AccountEntity { Id = request.Origin, Balance = -request.Amount });
+            // transfer = withdraw + deposit
 
-            // deposit
-            Accounts?.Add(new AccountEntity { Id = request.Destination, Balance = request.Amount });
- 
+            Withdraw(new WithdrawRequest { Origin = request.Origin, Amount = request.Amount });
+            Deposit(new DepositRequest { Destination = request.Destination, Amount = request.Amount });
+  
             var response = new TransferResponse
             {
                 Origin = new AccountEntity { Id = request.Origin, Balance = GetBalance(request.Origin) },
