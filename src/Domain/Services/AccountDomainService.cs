@@ -20,10 +20,10 @@ namespace BankApi.Domain.Services
 
         public AccountEntity GetAccount(string account_id)
         {
-            return AccountStorage.Find(account_id);
+            return  AccountStorage.Find(account_id);
         }
 
-        public int GetBalance(string account_id)
+        public  int GetBalance(string account_id)
         {
             return AccountStorage.GetBalance(account_id);
         }
@@ -39,7 +39,7 @@ namespace BankApi.Domain.Services
         }
  
         /// <summary>
-        /// Transfer money from origin to destiny account
+        /// Transfer money from origin to account destination
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

@@ -47,12 +47,11 @@ namespace BankApi.Domain.Entities
 
         public static DepositResponse Deposit(DepositRequest request)
         {
- 
-           var account = Find(request.Destination);
+            var account = Find(request.Destination);
 
             if (account.Id == null)
             {
-                 account = Create(request.Destination, request.Amount);
+                account = Create(request.Destination, request.Amount);
             }
             else
             {
@@ -62,7 +61,7 @@ namespace BankApi.Domain.Entities
             if (Accounts == null)
             {
                 Accounts = new List<AccountEntity>();
-            }            
+            }
 
             Accounts?.Add(account);
 
@@ -80,13 +79,15 @@ namespace BankApi.Domain.Entities
 
         public static WithdrawResponse Withdraw(WithdrawRequest request)
         {
-             var account = Find(request.Origin);
+            var account = Find(request.Origin);
 
-            if (account != null)
+            if (account.Id == null)
             {
-                account.Balance -= request.Amount;
-                Accounts?.Add(account);
+                return new WithdrawResponse();
             }
+
+            account.Balance -= request.Amount;
+            Accounts?.Add(account); 
 
             var response = new WithdrawResponse
             {

@@ -7,7 +7,7 @@ namespace BankApi.Controllers
 {
     [Route("")]
     [ApiController]
-     public class AccountController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly IAccountApplicationService _accountApplicationService;
 
@@ -38,7 +38,7 @@ namespace BankApi.Controllers
         {
             var account = _accountApplicationService.GetAccount(account_id);
 
-            if ( account.Id == null)
+            if (account.Id == null)
             {
                 return NotFound(0);
             }
@@ -48,9 +48,9 @@ namespace BankApi.Controllers
         }
 
         /// <summary>
-        /// Send event
+        /// Send account events
         /// </summary>
-        /// <param name="eventModel"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("event")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -62,6 +62,12 @@ namespace BankApi.Controllers
             try
             {
                 var result = _accountApplicationService.SendEvent(request);
+
+                if (request.Type.ToLower() == "withdraw")
+                {
+                    if (result.Origin == null)
+                        return NotFound(0);
+                }
 
                 var response = JsonConvert.SerializeObject(result);
 
