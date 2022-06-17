@@ -9,7 +9,9 @@ Esta API consiste de 3 endpoints
  - GET /balance
  - POST /event
  
-Exemplos de requests e seus respectivos responses:
+Usando o Swagger foram realizados testes localmente de todas as rotas com os requests e seus respectivos responses, conforme visto abaixo:
+
+
 
 #1 Reset state before starting tests
 POST /reset												
