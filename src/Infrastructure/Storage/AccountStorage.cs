@@ -20,8 +20,7 @@ namespace BankApi.Domain.Entities
         public static AccountEntity Create(string account_id, int balance)
         {
             return new AccountEntity(account_id, balance);
-
-        }
+         }
 
         /// <summary>
         /// Verify if account exists

@@ -61,6 +61,11 @@ namespace BankApi.Controllers
         {
             try
             {
+                if (!CheckEventType(request.Type))
+                {
+                    return NotFound(0);
+                }
+
                 var result = _accountApplicationService.SendEvent(request);
 
                 if (request.Type.ToLower() == "withdraw" )
@@ -85,5 +90,12 @@ namespace BankApi.Controllers
             }
 
         }
+
+        private bool CheckEventType( string eventType)
+        {
+            return new List<string> { "deposit", "withdraw", "transfer" }.Contains(eventType);
+        }
+
+
     }
 }
