@@ -1,5 +1,5 @@
 ## TestBankApi - Aplicação de Web Api desenvolvido em Net Core 6 
-  Simula operações bancárias dem contas correntes, tais como depósito, resgate e transferência de valores monetários.
+  Simula operações bancárias em contas correntes, tais como depósito, resgate e transferência de valores monetários.
   
 ![image](https://user-images.githubusercontent.com/4015482/174405289-4929d788-550c-468d-9e21-c4231a0f4c36.png)
 
