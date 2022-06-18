@@ -1,7 +1,8 @@
 ﻿using BankApi.Application.Dtos.Account;
+using BankApi.Domain.Common;
 using BankApi.Domain.Entities;
 using BankApi.Domain.Services;
- 
+
 namespace BankApi.Application.Services.Account
 {
     public class AccountApplicationService : IAccountApplicationService
@@ -27,14 +28,14 @@ namespace BankApi.Application.Services.Account
         {
             return _accountDomainService.GetBalance(account_id);
         }
- 
+
         public dynamic SendEvent(EventEntity entity)
         {
             dynamic result = null;
 
             switch (entity.Type.ToLower())
             {
-                case "deposit":
+                case Constants.EVENT_DEPOSIT:
 
                     result = _accountDomainService
                              .Deposit(new DepositRequest
@@ -44,7 +45,17 @@ namespace BankApi.Application.Services.Account
                              });
                     break;
 
-                case "transfer":
+                case Constants.EVENT_WITHDRAW:
+
+                    result = _accountDomainService
+                            .Withdraw(new WithdrawRequest
+                            {
+                                Origin = entity.Origin,
+                                Amount = entity.Amount
+                            });
+                    break;
+
+                case Constants.EVENT_TRANSFER:
 
                     result = _accountDomainService
                              .Transfer(new TransferRequest
@@ -55,24 +66,18 @@ namespace BankApi.Application.Services.Account
                              });
 
                     break;
-
-                case "withdraw":
-
-                    result = _accountDomainService
-                            .Withdraw(new WithdrawRequest
-                            {
-                                Origin = entity.Origin,
-                                Amount = entity.Amount
-                            });
-
-                    break;
-
-
-            }
-
-            return result;
+             }
+             return result;
         }
-
-      
+ 
+        public bool CheckEventType(string eventType)
+        {
+            return new List<string>
+                        { Constants.EVENT_DEPOSIT,
+                          Constants.EVENT_WITHDRAW,
+                          Constants.EVENT_TRANSFER
+                        }.Contains(eventType);
+        }
+ 
     }
 }

@@ -10,8 +10,7 @@ namespace BankApi.Domain.Entities
         /// Reset account
         /// </summary>
         public static void Reset() => Accounts?.Clear();
-
-
+ 
         /// <summary>
         /// Create account
         /// </summary>
@@ -20,7 +19,7 @@ namespace BankApi.Domain.Entities
         public static AccountEntity Create(string account_id, int balance)
         {
             return new AccountEntity(account_id, balance);
-         }
+        }
 
         /// <summary>
         /// Verify if account exists
@@ -111,10 +110,9 @@ namespace BankApi.Domain.Entities
             }
 
             // transfer = withdraw + deposit
-
             Withdraw(new WithdrawRequest { Origin = request.Origin, Amount = request.Amount });
             Deposit(new DepositRequest { Destination = request.Destination, Amount = request.Amount });
-  
+
             var response = new TransferResponse
             {
                 Origin = new AccountEntity { Id = request.Origin, Balance = GetBalance(request.Origin) },
@@ -123,7 +121,6 @@ namespace BankApi.Domain.Entities
 
             return response;
         }
-
         public static int GetBalance(string account_id)
         {
             var balances = Accounts.FindAll(x => x.Id == account_id).ToList();

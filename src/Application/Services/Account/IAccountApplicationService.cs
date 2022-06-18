@@ -8,6 +8,6 @@ namespace BankApi.Application.Services.Account
         AccountEntity GetAccount(string account_id);
         int GetBalance(string account_id);
         dynamic SendEvent(EventEntity entity);
-
+        bool CheckEventType(string eventType);
     }
 }

@@ -1,7 +1,8 @@
 ﻿using BankApi.Application.Services.Account;
+using BankApi.Domain.Common;
 using BankApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using System.Net;
 
 namespace BankApi.Controllers
 {
@@ -18,12 +19,14 @@ namespace BankApi.Controllers
         /// <summary>
         /// Reset account
         /// </summary>
-        /// <returns></returns>
+        /// <returns></returns
+
         [HttpPost("reset")]
+        [Produces("text/plain")]
         public ActionResult Reset()
         {
             _accountApplicationService.Reset();
-            return Ok();
+            return Ok("OK");
         }
 
         /// <summary>
@@ -43,8 +46,7 @@ namespace BankApi.Controllers
                 return NotFound(0);
             }
 
-            var result = _accountApplicationService.GetBalance(account_id);
-            return Ok(result);
+            return Ok(_accountApplicationService.GetBalance(account_id));
         }
 
         /// <summary>
@@ -57,45 +59,36 @@ namespace BankApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult SendEvent(EventEntity request)
+        public ActionResult<string> SendEvent(EventEntity request)
         {
             try
             {
-                if (!CheckEventType(request.Type))
+                if (!_accountApplicationService.CheckEventType(request.Type))
                 {
                     return NotFound(0);
                 }
 
                 var result = _accountApplicationService.SendEvent(request);
 
-                if (request.Type.ToLower() == "withdraw" )
+                if (request.Type.ToLower() == Constants.EVENT_WITHDRAW)
                 {
                     if (result.Origin == null)
                         return NotFound(0);
                 }
- 
-                if (request.Type.ToLower() == "transfer")
+
+                if (request.Type.ToLower() == Constants.EVENT_TRANSFER)
                 {
                     if (result.Destination == null)
                         return NotFound(0);
                 }
 
-                var response = JsonConvert.SerializeObject(result);
-
-                return Created(string.Empty, response);
+                return Created(string.Empty, result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
         }
-
-        private bool CheckEventType( string eventType)
-        {
-            return new List<string> { "deposit", "withdraw", "transfer" }.Contains(eventType);
-        }
-
 
     }
 }
