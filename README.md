@@ -14,7 +14,7 @@ Foram usadas as ferramentas Ngrok e Ipkiss Tester para expor a aplicação para 
 
  Link do Ipkiss Tester(https://ipkiss.pragmazero.com/)
  
- Obs: Deve-se criar uma counta no Ngrok e que vai fornecer uma URL que pode ser usada na internet.
+ Obs: Deve-se criar uma counta no ngrok(https://ngrok.com/(  que vai fornecer uma URL de modo que o IP Local possa ser disponiblizado na internet.
  
 ![image](https://user-images.githubusercontent.com/4015482/174451472-5da4748e-43ff-492c-916f-13b05060c84a.png)
 
